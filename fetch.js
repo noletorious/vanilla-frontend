@@ -1,27 +1,31 @@
-const bodyElement = document.createElement("div");
-document.body.append(bodyElement);
-bodyElement.classList = "container";
-const ulElement = document.createElement("ul");
-bodyElement.append(ulElement);
-const liElement = document.createElement("li");
+api = "https://reqres.in/api/users/";
+
+const wrapper = document.createElement("div");
+document.body.append(wrapper);
+wrapper.classList.add("wrapper");
+const ul = document.createElement("ul");
+wrapper.append(ul);
 
 async function fetchData() {
   try {
-    const response = await fetch("https://reqres.in/api/users/");
-    return await response.json();
+    const response = await fetch(api);
+    const json = await response.json();
+    const { data } = json;
+    return await data;
   } catch (err) {
-    window.alert(err);
+    console.warn(err);
   }
 }
-
 async function displayData() {
-  let res = await fetchData();
+  let response = await fetchData();
 
-  res.data.forEach((i) => {
-    let name = i["first_name"];
-    ulElement.append(name);
-  });
-  console.log(res.data);
+  for (i of response) {
+    if (i.hasOwnProperty("email")) {
+      let li = document.createElement("li");
+      ul.append(li);
+      li.innerText = i.first_name;
+    }
+  }
 }
 
 displayData();
